@@ -1,10 +1,22 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 func main() {
-	p()
-	fmt.Println("hello I'ok")
+	t := time.NewTicker(time.Second * 2)
+	go func() {
+		for t := range t.C {
+			fmt.Println(t.Format("2006-01-02 15:04:05"))
+			p()
+			fmt.Println("hello I'ok")
+		}
+	}()
+
+	time.Sleep(time.Second * 10)
+	t.Stop()
 }
 
 func p() {
