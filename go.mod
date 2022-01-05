@@ -17,6 +17,7 @@ require (
 	github.com/eapache/go-resiliency v1.2.0 // indirect
 	github.com/eapache/go-xerial-snappy v0.0.0-20180814174437-776d5712da21 // indirect
 	github.com/eapache/queue v1.1.0 // indirect
+	github.com/go-resty/resty/v2 v2.7.0
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/hashicorp/go-uuid v1.0.2 // indirect
@@ -32,6 +33,6 @@ require (
 	github.com/urfave/cli v1.22.5
 	go.uber.org/zap v1.19.1
 	golang.org/x/crypto v0.0.0-20210920023735-84f357641f63 // indirect
-	golang.org/x/net v0.0.0-20210917221730-978cfadd31cf // indirect
+	golang.org/x/net v0.0.0-20211029224645-99673261e6eb // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
 )

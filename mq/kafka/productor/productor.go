@@ -30,7 +30,7 @@ func main() {
 	// kafka2 := "192.168.10.85:31091"
 	// kafka3 := "192.168.10.85:31092"
 
-	kafka := "192.168.10.91:9092"
+	kafka := "192.168.10.90:39092"
 
 	client, err := sarama.NewSyncProducer([]string{kafka}, config)
 	if err != nil {

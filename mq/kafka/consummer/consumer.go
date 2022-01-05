@@ -11,12 +11,12 @@ import (
 func main() {
 	config := sarama.NewConfig()
 	config.Consumer.Return.Errors = true
-	consumer, err := sarama.NewConsumer([]string{"192.168.10.85:31090"}, config)
+	consumer, err := sarama.NewConsumer([]string{"192.168.10.90:39092"}, config)
 	if err != nil {
 		fmt.Printf("fail to start consumer, err:%v\n", err)
 		return
 	}
-	partitionList, err := consumer.Partitions("metrics") // 根据topic取到所有的分区
+	partitionList, err := consumer.Partitions("baichuan-apigateway") // 根据topic取到所有的分区
 	if err != nil {
 		fmt.Printf("fail to get list of partition:err%v\n", err)
 		return
