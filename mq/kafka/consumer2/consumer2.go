@@ -11,7 +11,10 @@ import (
 func main() {
 	config := sarama.NewConfig()
 	config.Consumer.Return.Errors = true
-	client, err := sarama.NewClient([]string{"192.168.10.91:9092"}, config)
+	kafka1 := "192.168.10.100:49093"
+	kafka2 := "192.168.10.92:49092"
+	kafka3 := "192.168.10.91:49094"
+	client, err := sarama.NewClient([]string{kafka1, kafka2, kafka3}, config)
 	if err != nil {
 		panic(err)
 	}
@@ -24,14 +27,14 @@ func main() {
 	defer consumer.Close()
 
 	// get partitionId list
-	partitions, err := consumer.Partitions("baichuan-apigateway")
+	partitions, err := consumer.Partitions("test")
 	if err != nil {
 		panic(err)
 	}
 
 	for _, partitionId := range partitions {
 		// create partitionConsumer for every partitionId
-		partitionConsumer, err := consumer.ConsumePartition("baichuan-apigateway", partitionId, sarama.OffsetOldest)
+		partitionConsumer, err := consumer.ConsumePartition("test", partitionId, sarama.OffsetOldest)
 		if err != nil {
 			panic(err)
 		}
