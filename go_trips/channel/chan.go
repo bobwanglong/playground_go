@@ -46,11 +46,49 @@
 // // 	fmt.Println("hello")
 // // }
 
-// 华丽的解决方案 - channel嵌套channel
+// // 华丽的解决方案 - channel嵌套channel
 
+// package main
+
+// import (
+// 	"fmt"
+// 	"os"
+// 	"os/signal"
+// 	"syscall"
+// 	"time"
+// )
+
+// func main() {
+// 	sig := make(chan os.Signal)
+// 	signal.Notify(sig, syscall.SIGINT, syscall.SIGKILL)
+
+// 	stopCh := make(chan chan struct{})
+
+// 	go func(stopCh chan chan struct{}) {
+// 		for {
+// 			select {
+// 			case ch := <-stopCh:
+// 				fmt.Println("stopped")
+// 				ch <- struct{}{}
+// 				return
+// 			default:
+// 				time.Sleep(time.Second)
+// 			}
+// 		}
+// 	}(stopCh)
+// 	<-sig
+
+// 	ch := make(chan struct{})
+// 	stopCh <- ch
+// 	<-ch
+// 	fmt.Println("finished")
+// }
+
+// 标准解决方案
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"os/signal"
@@ -62,24 +100,27 @@ func main() {
 	sig := make(chan os.Signal)
 	signal.Notify(sig, syscall.SIGINT, syscall.SIGKILL)
 
-	stopCh := make(chan chan struct{})
+	ctx, cancel := context.WithCancel(context.Background())
+	finishCh := make(chan struct{})
 
-	go func(stopCh chan chan struct{}) {
+	go func(ctx context.Context, finishCh chan struct{}) {
 		for {
 			select {
-			case ch := <-stopCh:
+			case <-ctx.Done():
+				// 结束后，通过ch通知主goroutine
 				fmt.Println("stopped")
-				ch <- struct{}{}
+				finishCh <- struct{}{}
 				return
 			default:
 				time.Sleep(time.Second)
 			}
 		}
-	}(stopCh)
-	<-sig
 
-	ch := make(chan struct{})
-	stopCh <- ch
-	<-ch
+	}(ctx, finishCh)
+
+	<-sig
+	// 收到结束信号，通知子goroutine结束程序，资源回收
+	cancel()
+	<-finishCh // 主程序结束
 	fmt.Println("finished")
 }
