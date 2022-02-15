@@ -9,8 +9,8 @@
 这种设计模式，对一些被高频使用的代码非常有用：
 
 1. HTTP Server 被调用的hander
-1. HTTP Client发送请求
-1. 对MYSQL的操作
+2. HTTP Client发送请求
+3. 对MYSQL的操作
 
 装饰性的功能，常见的有：
 
